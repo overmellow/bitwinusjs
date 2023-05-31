@@ -1,11 +1,7 @@
-import { useUserContext } from "@/contexts/user";
-
-function LoggedinUser() {
-    const { user }: any = useUserContext();
-    
+function LoggedinUser({ userSession }: any) {
     return (<>
         {
-            user && user.email
+            userSession && userSession.email
         }
     </>  );
 }

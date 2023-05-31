@@ -3,19 +3,22 @@ import { useUserContext } from '@/contexts/user';
 
 export default function Guard({ children }: any) {
     const router = useRouter()
-    const { user }: any = useUserContext();
+    
 
     authCheck(router.asPath)
 
-    function authCheck(url: any) {
-        const publicPaths = ['/login'];
+    async function authCheck(url: any) {        
+        const publicPaths = ['/auth/login', '/auth/signup', '/'];
         const path = url.split('?')[0];
+        const { user }: any = await useUserContext();
+        console.log(user)
         if (!user) {           
             if(!publicPaths.includes(path)) {
-                router.push({
-                    pathname: '/login',
-                    query: { returnUrl: url }
-                });
+                if (typeof window === "undefined") return null;
+                // router.push({
+                //     pathname: '/auth/login',
+                //     query: { returnUrl: url }
+                // });
             }
         }         
     }

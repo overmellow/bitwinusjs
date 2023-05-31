@@ -1,15 +1,18 @@
-let db = [
-    {id: 1, name: 'jack', email: 'jack@mail.com', password: '1000'},
-    {id: 2, name: 'joe', email: 'joe@mail.com', password: '1000'},
-    {id: 3, name: 'jackson', email: 'jackson@mail.com', password: '1000'},
-]
+// import DB from "../db";
 
-export default function handler(req: any, res: any) {
+import connectMongo from "@/configs/db";
+import User from "@/pages/api/models/user";
+
+export default async function handler(req: any, res: any) {
+    // let db = DB.getInstance();
     if (req.method === 'POST') {
         console.log(req.body)
-        const u = db.find(u => u.email == req.body.email && u.password == req.body.password)        
-        if(u) {
-            res.status(200).json({ message: 'POST request handled', user: {id: u.id, email: u.email} });
+        await connectMongo();
+        const user: any = await User.findOne({email: req.body.email, password: req.body.password});
+        console.log(user)
+        // const u = db.all().find(u => u.email == req.body.email && u.password == req.body.password)        
+        if(user) {
+            res.status(200).json({ message: 'POST request handled', user: {id: user._id, email: user.email} });
         }
         res.status(404).json({message: 'wrong email or password'});
         

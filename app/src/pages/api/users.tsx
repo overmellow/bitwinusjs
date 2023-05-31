@@ -1,13 +1,15 @@
-let db = [
-    {id: 1, name: 'jack'},
-    {id: 2, name: 'joe'},
-    {id: 3, name: 'jackson'},
-]
+// import DB from './db';
+import connectMongo from "@/configs/db";
+import User from "@/pages/api/models/user";
 
-export default function handler(req: any, res: any) {
+export default async function handler(req: any, res: any) {
+    // let db = DB.getInstance();
+    await connectMongo();
+    const users: any = await User.find();
     if (req.method === 'GET') {
         // Handle GET request
-        res.status(200).json({ users: db });
+        // console.log(db.all())
+        res.status(200).json({ users: users });
     } else if (req.method === 'POST') {
         // Handle POST request
         res.status(200).json({ message: 'POST request handled', user: {id: 101, email: 'mori@mail.com'} });

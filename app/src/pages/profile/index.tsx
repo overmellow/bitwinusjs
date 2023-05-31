@@ -12,7 +12,7 @@ const fetcher = async (url: string) => {
 }
 
 export default function Profile() {
-  const { data, error, isLoading, isValidating } = useSWR<any,any>(() => ('/api/blog'), fetcher)
+  const { data, error, isLoading, isValidating } = useSWR<any,any>(() => ('/api/profile'), fetcher)
 
   if (error) return <div>{error.message}</div>
   if (isLoading) return <div>Loading...</div>

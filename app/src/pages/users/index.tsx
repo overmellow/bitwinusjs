@@ -18,11 +18,11 @@ export default function Users() {
   if (!data) return null
 
   return <>
-    <h1>Blog</h1>
+    <h1>Users</h1>
     <ul>
     {
       data.users.map((u: any) => {
-        return <li key={u.id}>{u.name}</li>
+        return <li key={u._id}>{u.email}</li>
       })
     }
     </ul>    

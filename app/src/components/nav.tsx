@@ -1,13 +1,26 @@
 import Link from 'next/link'
 
-function Nav() {
+function Nav({ userSession }: any) {
     return (
         <nav>
-            <Link href={"/"}>Home</Link> &nbsp;
+            <Link  href={"/"}>Home</Link> &nbsp;
+        {userSession &&
+            <>
             <Link href={"/profile"}>Profile</Link> &nbsp;
             <Link href={"/users"}>Users</Link> &nbsp;
-            <Link href={"/login"}>Login</Link> &nbsp;  
-            <Link href={"/logout"}>Log Out</Link> &nbsp;  
+            <Link href={"/contracts"}>Contracts</Link> &nbsp;
+            </>
+        }
+        {userSession ? (
+            <>
+              <Link href="/auth/logout">Log Out</Link>&nbsp;
+            </>
+          ) : (
+            <>
+              <Link href="/auth/signup">Sign Up</Link>&nbsp;
+              <Link href="/auth/login">Login</Link>&nbsp;
+            </>
+          )}                     
         </nav>
       );
 }
