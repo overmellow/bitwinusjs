@@ -1,11 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from 'next/router';
-import { useUserContext } from "@/contexts/user";
 
 function Signup() {
     const router = useRouter();
-    const { setUser }: any = useUserContext();
     // console.log(useUserContext())
     const initialLogin = {
         name: '',
@@ -23,8 +21,6 @@ function Signup() {
         e.preventDefault();
         const res = await axios.post('/api/auth/signup', signupUser)
         if(res.status == 200) {
-            // console.log()
-            // setUser(res.data.user)
             router.push('/')
         }
     }
@@ -36,7 +32,7 @@ function Signup() {
         <br /><br />
         Password: <input type="password" name="password" value={signupUser.password} onChange={handleChange} />
         <br /><br />
-        <input type="submit" onClick={handleSubmit} name="Sign Up" />
+        <input type="submit" onClick={handleSubmit} name="Sign Up" value="Sign Up" />
       </form>      
     </>;
 }

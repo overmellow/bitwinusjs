@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useRouter } from 'next/router';
 import { useUserContext } from "@/contexts/user";
 import LocalStorage from "@/utils/LocalStorage";
@@ -19,7 +18,7 @@ export default function Login() {
     }
 
     return <>
-      <h1>Log Out</h1>
+      <h2>Log Out</h2>
       <form>
         <input type="submit" onClick={handleSubmit} name="Log Out" value="Log Out" />
       </form>      

@@ -18,7 +18,8 @@ export default async function handler(req: any, res: any) {
         res.status(200).json({ message: 'PUT request handled' });
     } else if (req.method === 'DELETE') {
         // Handle DELETE request
-        res.status(200).json({ message: 'DELETE request handled' });
+        const user = await User.findByIdAndDelete(req.query.id);
+        res.status(200).json({ message: `user with id ${user._id} deleted!` });
     } else {
         // Handle other request types
         res.status(405).json({ message: 'Method Not Allowed' });

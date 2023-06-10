@@ -38,7 +38,7 @@ export default function Login() {
         <br /><br />
         Password: <input type="password" name="password" value={loginUser.password} onChange={handleChange} />
         <br /><br />
-        <input type="submit" onClick={handleSubmit} name="Login" />
+        <input type="submit" onClick={handleSubmit} name="Login" value="Log In" />
       </form>      
     </>;
   }

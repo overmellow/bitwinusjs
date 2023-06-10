@@ -28,7 +28,7 @@ function Contracts() {
     }
   
     return <>
-      <h1>Contracts</h1>
+      <h2>Contracts</h2>
       <ul>
       {
         data.contracts.map((u: any) => {

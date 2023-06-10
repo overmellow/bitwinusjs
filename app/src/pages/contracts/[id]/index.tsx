@@ -19,6 +19,7 @@ function Contract() {
     if (error) return <div>{error.message}</div>
     if (isLoading) return <div>Loading...</div>
     if (!data) return null
+    
     const remove = async (id: any) => {
       try {
         // Make the delete request
@@ -33,11 +34,19 @@ function Contract() {
     }
   
     return <>
-      <h1>Contract</h1>
-      {data.contract._id}:{data.contract.name}
-      <br /><br />
-      <button onClick={() => remove(data.contract._id)}>Delete</button> &nbsp;
-      <Link href={`/contracts/${data.contract._id}/signers`}>Signers</Link>
+      <h2>Contract</h2>
+      {data.contract?._id} : {data.contract?.name}
+      <br />
+      <ol>      
+      {
+        data.contract?.clauses.map((c: any, i: any) => {
+          return <li key={i}>{c}</li>
+        })
+      }
+      </ol>
+      <button onClick={() => remove(data.contract?._id)}>Delete</button> &nbsp;
+      <Link href={`/contracts/${data.contract?._id}/signers`}>Signers</Link> &nbsp;
+      <Link href={`/contracts/${data.contract?._id}/compose`}>Compose</Link>
     </>;
 }
 

@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+import { useRouter } from 'next/router';
 
 const fetcher = async (url: string) => {
   const res = await fetch(url)
@@ -11,18 +12,32 @@ const fetcher = async (url: string) => {
 }
 
 export default function Users() {
-  const { data, error, isLoading, isValidating } = useSWR<any,any>(() => ('/api/users'), fetcher)
-
+  const { data, error, isLoading, mutate } = useSWR<any,any>(() => ('/api/users'), fetcher)
+  const router = useRouter();
   if (error) return <div>{error.message}</div>
   if (isLoading) return <div>Loading...</div>
   if (!data) return null
 
+  const remove = async (id: any) => {
+    console.log(id)
+    try {
+      // Make the delete request
+      await fetch(`/api/users/${id}`, { method: 'DELETE' });
+
+      // Update the data by re-fetching
+      mutate();
+      router.push('/users')
+    } catch (error) {
+      console.error('Error deleting data:', error);
+    }
+  }
+
   return <>
-    <h1>Users</h1>
+    <h2>Users</h2>
     <ul>
     {
       data.users.map((u: any) => {
-        return <li key={u._id}>{u.email}</li>
+        return <li key={u._id}>{u.email} <button onClick={() => remove(u._id)}>X</button></li>
       })
     }
     </ul>    

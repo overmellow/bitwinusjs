@@ -29,17 +29,18 @@ function NewContract() {
         e.preventDefault();
         const res = await axios.post('/api/contracts', newContract)
         if(res.status == 200) {
-            // router.push('/contracts')
-            router.push('/contracts/signers')
+            // router.push('/contracts')   
+            console.log(res.data.contract._id)         
+            router.push('/contracts/'+ res.data.contract._id + '/signers')
         }
     }
   
     return <>
-      <h1>New Contract</h1>
+      <h2>New Contract</h2>
       <form>
         Name: <input type="text" name="name" value={newContract.name} onChange={handleChange} />
         <br /><br />
-        <input type="submit" onClick={handleSubmit} name="Login" />
+        <input type="submit" onClick={handleSubmit} name="Create" value="Create" />
       </form> 
     </>;
 }

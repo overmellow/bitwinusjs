@@ -1,4 +1,5 @@
-import Link from "next/link";
+"use client"
+
 import useSWR from 'swr'
 
 const fetcher = async (url: string) => {
@@ -19,8 +20,7 @@ export default function Profile() {
   if (!data) return null
 
   return <>
-    <h1>Profile</h1>
+    <h2>Profile</h2>
     <div>{data.name}</div>
-    <Link href={"/"} >Home</Link> 
   </>;
 }

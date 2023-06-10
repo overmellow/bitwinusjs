@@ -1,7 +1,6 @@
-'use client';
+"use client"
 
 import LocalStorage from "@/utils/LocalStorage";
-import { error } from "console";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const UserContext = createContext({})
