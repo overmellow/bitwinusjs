@@ -1,3 +1,4 @@
+import { Status } from '@/models/Status';
 import { Schema, model, models } from 'mongoose';
 
 const contractSchema = new Schema({
@@ -6,7 +7,13 @@ const contractSchema = new Schema({
   parties: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
-  }],  
+  }],
+  status: {
+    type: String,
+    enum: Status,
+    default: Status.NEW,
+    required: true
+  },  
   clauses: [
     {
       text: {

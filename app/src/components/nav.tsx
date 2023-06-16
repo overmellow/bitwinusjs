@@ -9,6 +9,7 @@ function Nav({ userSession }: any) {
             <Link href={"/profile"}>Profile</Link> &nbsp;
             <Link href={"/users"}>Users</Link> &nbsp;
             <Link href={"/contracts"}>Contracts</Link> &nbsp;
+            <Link href={"/admin/contracts"}>All Contracts</Link> &nbsp;
             </>
         }
         {userSession ? (

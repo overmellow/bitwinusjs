@@ -1,53 +1,44 @@
 import useSWR from 'swr'
 import Link from 'next/link'
-import { useState } from 'react'
-
-const fetcher = async (url: string) => {
-  const res = await fetch(url)
-  const data = await res.json()
-
-  if (res.status !== 200) {
-    throw new Error(data.message)
-  }
-  return data
-}
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import fetcher from './fetcher'
+import { Status } from '@/models/Status'
+import { useUserContext } from '@/contexts/user';
 
 function Contracts() {
-    const [selectedContract, setSelectedContract] = useState(null);
-    const { data, error, isLoading } = useSWR<any,any>(() => ('/api/contracts'), fetcher)
-    
-    if (error) return <div>{error.message}</div>
-    if (isLoading) return <div>Loading...</div>
-    if (!data) return null
+  const { user }: any = useUserContext();
+  const router = useRouter();
+  const { data, error, isLoading } = useSWR<any,any>(() => (`/api/users/${user.id}`), fetcher)
+  
+  if (error) return <div>{error.message}</div>
+  if (isLoading) return <div>Loading...</div>
+  if (!data) return null
 
-
-
-    const selectContract = (id: any) => {
-      const c = data.contracts.find((e: any) => e._id == id);
-      setSelectedContract(c);
+  const createNew = async () => {
+    const res = await axios.post('/api/contracts', {status: Status.NEW});
+    if(res.status == 200) {      
+      console.log(data)
+      router.push('/contracts/'+ res.data.contract._id + '/signers')
     }
+  }
   
     return <>
       <h2>Contracts</h2>
       <ul>
       {
-        data.contracts.map((u: any) => {
-          return <li key={u._id}>
-              <Link href={`/contracts/${u._id}`}>
-              {u.name}
+        data.user?.contracts?.map((u: any) => {
+          return <li key={u}>
+              <Link href={`/contracts/${u}`}>
+                {/* { u.name != null ? u.name : u._id } */}
+                {u}
               </Link> &nbsp;
-              <a onClick={() => selectContract(u._id)}>
-                {u.name}
-              </a>
+              {u}
             </li>
         })
       }
-      </ul>    
-      {
-        selectedContract && selectedContract.name
-      }
-      <br /><br />
-      <Link href={'contracts/new'}>New Contract</Link>
+      </ul>
+      <button onClick={createNew}>New Contract</button>
     </>;
 }
 

@@ -1,16 +1,7 @@
 import useSWR from 'swr'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
-
-const fetcher = async (url: string) => {
-  const res = await fetch(url)
-  const data = await res.json()
-
-  if (res.status !== 200) {
-    throw new Error(data.message)
-  }
-  return data
-}
+import fetcher from '../fetcher';
 
 function Contract() {
     const router = useRouter();
@@ -36,11 +27,18 @@ function Contract() {
     return <>
       <h2>Contract</h2>
       {data.contract?._id} : {data.contract?.name}
-      <br />
-      <ol>      
+      <ul>
       {
-        data.contract?.clauses.map((c: any, i: any) => {
-          return <li key={i}>{c}</li>
+      data.contract?.parties.map((p: any) => {
+        return <li key={p.email}>{p.email}</li>
+      })
+      }    
+      </ul>
+      <ol>
+      {
+        data.contract != null &&
+        Array.from(data.contract.clauses)?.map((p: any) => {
+          return <li key={p._id}>{p.text}</li>
         })
       }
       </ol>

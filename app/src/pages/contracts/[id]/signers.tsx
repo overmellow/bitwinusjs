@@ -3,31 +3,23 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-const fetcher = async (url: string) => {
-    const res = await fetch(url)
-    const data = await res.json()
-  
-    if (res.status !== 200) {
-      throw new Error(data.message)
-    }
-    return data
-  }
+import fetcher from '../fetcher';
 
 function Signers() {
     const router = useRouter();
-
-    const [parties, setParties]: any = useState(new Set());
+    const [parties, setParties]: any = useState(new Set([]));
     const [newParty, setNewParty] = useState({email: ''});
-    const { data, error, isLoading, mutate } = useSWR<any,any>(() => (`/api/contracts/${router.query.id}`), fetcher)
+    const { data, error, isLoading } = useSWR<any,any>(() => (`/api/contracts/${router.query.id}`), fetcher)
+
+    useEffect(() => {
+      setParties(new Set(data?.contract?.parties))
+    }, [])
 
     if (error) return <div>{error.message}</div>
     if (isLoading) return <div>Loading...</div>
     if (!data) return null
-    useEffect(() => {
-      setParties(data.contract.parties)
-    }, [])
-    
+
+    // console.log(parties.size)
 
     const handleChange = (e: any) => {
       setNewParty({...newParty, email: e.target.value})
@@ -40,13 +32,12 @@ function Signers() {
         console.log(res)
           // router.push('/contracts')   
           // console.log(res.data.contract._id)         
-          router.push('/contracts/'+ data.contract._id + '/review')
+          router.push('/contracts/'+ data.contract._id + '/compose')
       }
     }
 
     const addSigner = (e: any) => {
       setParties([...parties, newParty])
-      console.log(parties)
     }
 
     return (<>
@@ -57,13 +48,14 @@ function Signers() {
           email: <input type="email" name="email" value={newParty.email} onChange={handleChange} /> &nbsp;
           <input type='button' onClick={addSigner} name="Add Signer" value="Add Signer" /> 
           <br /><br />          
-          <input type="submit" onClick={handleSubmit} name="Review & Send" value="Review & Send" />
+          <input type="submit" onClick={handleSubmit} name="Compose" value="Compose" />
         </form>
         <ul>
           {
             // data.contract?.parties.map((p: any) => {
             //   return <li key={p.email}>{p.email}</li>
             // })
+            parties != null &&
             Array.from(parties)?.map((p: any) => {
               return <li key={p.email}>{p.email}</li>
             })

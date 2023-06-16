@@ -13,9 +13,11 @@ export default async function handler(req: any, res: any) {
         }
     }
     else if (req.method === 'POST') {
+        console.log(req.body)
         try {
             await connectMongo();        
-            const contract = await Contract.create(req.body);        
+            const contract = await Contract.create({status: req.body.status});
+            console.log(contract)        
             res.json({ contract });
         } catch (error) {
             res.json({ error });

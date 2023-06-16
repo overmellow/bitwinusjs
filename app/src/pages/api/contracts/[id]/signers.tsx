@@ -1,4 +1,5 @@
 import connectMongo from "@/configs/db";
+import { Status } from "@/models/Status";
 import Contract from "@/pages/api/models/contract";
 import User from "@/pages/api/models/user";
 
@@ -18,21 +19,18 @@ export default async function handler(req: any, res: any) {
         try {
             await connectMongo();
             req.body.parties.map(async (p: any) => {
-                console.log(p.email)
                 const user = await User.findOneAndUpdate({email: p.email}, p, { upsert: true, new: true });
-                console.log(user);
-                const contract = await Contract.findByIdAndUpdate(req.query.id, { $addToSet: { parties: user } });                
-                console.log(contract)
-            })
+                // // User.findByIdAndUpdate(, { $addToSet: { parties: user } });
             
-            // console.log(req.query.id)            
-            // const contract = await Contract.findByIdAndUpdate(req.query.id, req.body.contract);
-            // const contract = await Contract.findByIdAndUpdate(req.query.id, {clauses: ['you should sign!']});
-
-            console.log('we')
-
-            // console.log(contract)
-            res.json({ message: `contract with id  update!` });
+                // user.contracts.push(req.query.id);
+                // user.save();
+                await Contract.findByIdAndUpdate(req.query.id, { $addToSet: { parties: user } });
+                await User.findByIdAndUpdate(user._id, { $addToSet: { contracts: req.query.id } });                  
+            })
+            await Contract.findByIdAndUpdate(req.query.id, { status: Status.PARTIES });               
+            const contract = await Contract.findById(req.query.id);                
+            console.log(contract)
+            res.json({ message: `contract with id  update!`, contract: contract});
             // res.json({ message: `contract with id ${contract._id} update!` });
         } catch (error) {
             res.json({ error });

@@ -7,7 +7,7 @@ export default async function handler(req: any, res: any) {
         try {
             await connectMongo();
           
-            const contract = await Contract.findById(req.query.id).populate('parties');
+            const contract = await Contract.findById(req.query.id);
             res.json({ contract });
           } catch (error) {
             res.json({ error });
@@ -17,14 +17,15 @@ export default async function handler(req: any, res: any) {
         console.log(req.body)
         try {
             await connectMongo();
-            // console.log(req.query.id)            
-            // const contract = await Contract.findByIdAndUpdate(req.query.id, req.body.contract);
-            // const contract = await Contract.findByIdAndUpdate(req.query.id, {clauses: ['you should sign!']});
-
-            console.log('we')
-
-            // console.log(contract)
-            res.json({ message: `contract with id  update!` });
+            req.body.clauses.map(async (p: any) => {
+                console.log(p)
+                // const user = await User.findOneAndUpdate({email: p.email}, p, { upsert: true, new: true });
+                // await Contract.findByIdAndUpdate(req.query.id, { $addToSet: { parties: user } });               
+                await Contract.findByIdAndUpdate(req.query.id, { $addToSet: { clauses: p } });               
+            })            
+            const contract = await Contract.findById(req.query.id);                
+            console.log(contract)
+            res.json({ message: `contract with id  update!`, contract: contract});
             // res.json({ message: `contract with id ${contract._id} update!` });
         } catch (error) {
             res.json({ error });
@@ -34,9 +35,6 @@ export default async function handler(req: any, res: any) {
         try {
             await connectMongo();
             const contract = await Contract.findByIdAndDelete(req.query.id);
-            contract.parties.map(async (p: any) => {
-                await User.findByIdAndUpdate(p, { $pull: { contracts: contract._id } })
-            })
             res.json({ message: `contract with id ${contract._id} deleted!` });
         } catch (error) {
             res.json({ error });

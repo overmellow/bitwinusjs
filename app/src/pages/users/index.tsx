@@ -37,7 +37,7 @@ export default function Users() {
     <ul>
     {
       data.users.map((u: any) => {
-        return <li key={u._id}>{u.email} <button onClick={() => remove(u._id)}>X</button></li>
+        return <li key={u._id}>{u._id} :{u.email} <button onClick={() => remove(u._id)}>X</button></li>
       })
     }
     </ul>    

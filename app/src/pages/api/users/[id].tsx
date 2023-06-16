@@ -9,7 +9,10 @@ export default async function handler(req: any, res: any) {
     if (req.method === 'GET') {
         // Handle GET request
         // console.log(db.all())
-        res.status(200).json({ users: users });
+        const user = await User.findById(req.query.id)
+        // .populate('contracts');
+        console.log(user)
+        res.status(200).json({ user: user });
     } else if (req.method === 'POST') {
         // Handle POST request
         res.status(200).json({ message: 'POST request handled', user: {id: 101, email: 'mori@mail.com'} });
